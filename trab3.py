@@ -1,9 +1,15 @@
 import numpy as np
-from sympy import diff, Symbol
+#from sympy import diff, Symbol
 
 
-def function(x):
-    return x**3 - 9*x**2 + 24*x - 24
+def function1(x):
+    return np.e**x + 2**(-x) + 2 * np.cos(x) - 6 
+
+def function2(x):
+    return 2 * x * np.cos(2 * x) - (x - 2)**2
+
+def function3(x):
+    return np.e**x - 3*x**2
 
 def derivatefunction(x):
     return 3*x**2 - 18*x + 24
@@ -103,20 +109,20 @@ def Secant(f, x0, x1, tolerance, n_max):
 phi = lambda x: function(x) / derivatefunction(x)
 listas_funcoes = ['bisection','regulaFalsi']
 
-x = Symbol('x')
+#x = Symbol('x')
 #print("valor do diff",diff(function,x))
 
 
 for nome_funcao in listas_funcoes:
-    x, error, n = globals()[nome_funcao](function, 0, 6, 1e-6, 100)
+    x, error, n = globals()[nome_funcao](function1, 1, 2, 1e-6, 100)
     print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
 
-x, error, n = FixedPoint(function, phi,0, 6, 1e-6, 100)
-print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
+#x, error, n = FixedPoint(function, phi,0, 6, 1e-6, 100)
+#print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
 
-x,error,n = Newton(function, derivatefunction, 1,1e-6,100)
-print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
+#x,error,n = Newton(function, derivatefunction, 1,1e-6,100)
+#print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
 
-x,error,n = Secant(function, 0, 6,1e-6,100)
-print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
+#x,error,n = Secant(function, 0, 6,1e-6,100)
+#print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
 
