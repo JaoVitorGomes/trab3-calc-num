@@ -70,6 +70,9 @@ iteracoesPontoFixo = []
 iteracoesNewton = []
 iteracoesSecante = []
 
+# Funções PHI
+phis = [sp.ln(6 - 2**(-x) - 2*sp.cos(x)), sp.acos(((x - 2)**2)/(2*x)), sp.sqrt(sp.exp(x)/3), sp.ln(3*x**2)]
+
 # Titulos para os gráficos
 titulos = ["Gráfico função da letra a)", "Gráfico função da letra b) x -> [2,3]", "Gráfico função da letra b) x -> [3,4]", "Gráfico função da letra c) x -> [0,1]", "Gráfico função da letra c) x -> [3,5]"]
 # Controla qual função está sendo processada
@@ -83,14 +86,19 @@ for [funcao, derivada] in zip(funcoes, derivadas):
     match contador:
         case 0:
             lb = 1; ub = 2
+            phi = phis[0]
         case 1:
             lb = 2; ub = 3
+            phi = phis[1]
         case 2:
             lb = 3; ub = 4
+            phi = phis[1]
         case 3: 
             lb = 0; ub = 1
+            phi = phis[2]
         case 4:
-            lb = 3; ub = 5 
+            lb = 3; ub = 5
+            phi = phis[3] 
     
     # Bisseção
     [raizBi, imagem_raizBi, n_iteracoesBi, x0, x1] = metodos.bisection(funcao, lb, ub, tolerancia, max_iter)
@@ -99,15 +107,14 @@ for [funcao, derivada] in zip(funcoes, derivadas):
     [raizFP, imagem_raizFP, n_iteracoesFP] = metodos.regulaFalsi(funcao, lb, ub, tolerancia, max_iter)
     print("Terminei Falsa Posição")
     # Ponto Fixo
-    [raizPF, imagem_raizPF, n_iteracoesPF] = metodos.FixedPoint(funcao, funcao/derivada,lb, ub, tolerancia, max_iter)
+    [raizPF, imagem_raizPF, n_iteracoesPF] = metodos.FixedPoint(funcao, phi, lb, ub, tolerancia, max_iter)
     print("Terminei Ponto Fixo")
     # Newton
-    [raizNew, imagem_raizNew, n_iteracoesNew] = metodos.Newton(funcao,derivada,x0, tolerancia, max_iter)
+    [raizNew, imagem_raizNew, n_iteracoesNew] = metodos.Newton(funcao, derivada, x0, tolerancia, max_iter)
     print("Terminei Newton")
     # Secante
     [raizSec, imagem_raizSec, n_iteracoesSec] = metodos.Secant(funcao, x0, x1, tolerancia, max_iter)
     print("Terminei Secante")
-    
     
     # Plots
     plt.title(titulos[contador], fontdict=fonte_titulo)
