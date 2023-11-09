@@ -1,128 +1,136 @@
 import numpy as np
-#from sympy import diff, Symbol
+import sympy as sp
+import metodos
+import matplotlib.pyplot as plt
 
+#----------Configuração das fontes------------
+fonte_titulo={  
+              "fontsize":14,
+              "fontweight": 'bold',
+              "fontname":'Times New Roman',
+              }
+fonte_labels={
+            "fontsize":12,
+            "fontweight":'bold',
+            'fontname':'Times New Roman',
+            }
+fonte_legenda={
+            "size":9,
+            "weight":'normal',
+            'family':'Times New Roman',
+            }
 
+# ---------------Funções---------------------------
 def function1(x):
-    return np.e**x + 2**(-x) + 2 * np.cos(x) - 6 
+    return sp.exp(x) + 2**(-x) + 2 * sp.cos(x) - 6
 
 def function2(x):
-    return 2 * x * np.cos(2 * x) - (x - 2)**2
+    return 2 * x * sp.cos(2 * x) - (x - 2)**2
 
 def function3(x):
-    return np.e**x - 3*x**2
+    return sp.exp(x) - 3*x**2
 
-def derivatefunction(x):
-    return 3*x**2 - 18*x + 24
+# ----------------Derivada--------------------------
+def derivatefunction(funcao):
+    x = sp.Symbol('x')
+    return sp.diff(funcao, x)
 
-def bisection(f, a, b, tolerance, n_max):
-    if f(a) * f(b) >= 0:
-        print("As funções f(a) e f(b) deve ter sinais diferentes.")
-        return
+# -----------------MAIN------------------------------
 
-    c = a
-    for i in range(n_max):
-        c = (a + b) / 2
-        if abs(f(c)) < tolerance:
-            break
-        if f(c) * f(a) < 0:
-            b = c
-        else:
-            a = c
-    else:
-        print("O maximo de iterações foi alcançado.")
+x = sp.Symbol('x')
 
-    return c, abs(f(c)), i
+funcoes = []
+funcoes.append(function1(x))
+funcoes.append(function2(x))
+funcoes.append(function3(x))
 
+derivadas = []
+derivadas.append(derivatefunction(funcoes[0]))
+derivadas.append(derivatefunction(funcoes[1]))
+derivadas.append(derivatefunction(funcoes[2]))
 
-def regulaFalsi(f, a, b, tolerance, n_max):
+# Vetores de Raízes
+raizesBissecao = []
+raizesFalsaPosicao = []
+raizesPontoFixo = []
+raizesNewton = []
+raizesSecante = []
+
+# Vetores para os erros
+errosBissecao = []
+errosFalsaPosicao = []
+errosPontoFixo = []
+errosNewton = []
+errosSecante = []
+
+# Vetores de iterações
+iteracoesBissecao = []
+iteracoesFalsaPosicao = []
+iteracoesPontoFixo = []
+iteracoesNewton = []
+iteracoesSecante = []
+
+# Titulos para os gráficos
+titulos = ["Gráfico função da letra a)", "Gráfico função da letra b) x -> [2,3]", "Gráfico função da letra b) x -> [3,4]", "Gráfico função da letra c) x -> [0,1]", "Gráfico função da letra c) x -> [3,5]"]
+# Controla qual função está sendo processada
+contador = 0
+# Tolerância para o erro
+tolerancia = 0.00000001
+# Número máximo de iterações
+max_iter = 1000
+
+for [funcao, derivada] in zip(funcoes, derivadas):
+    match contador:
+        case 0:
+            lb = 1; ub = 2
+        case 1:
+            lb = 2; ub = 3
+        case 2:
+            lb = 3; ub = 4
+        case 3: 
+            lb = 0; ub = 1
+        case 4:
+            lb = 3; ub = 5 
     
-    if f(a) * f(b) >= 0:
-        print("As funções f(a) e f(b) deve ter sinais diferentes.")
-        return
+    # Bisseção
+    [raizBi, imagem_raizBi, n_iteracoesBi, x0, x1] = metodos.bisection(funcao, lb, ub, tolerancia, max_iter)
+    print("Terminei Bisseção")
+    # Falsa Posição
+    [raizFP, imagem_raizFP, n_iteracoesFP] = metodos.regulaFalsi(funcao, lb, ub, tolerancia, max_iter)
+    print("Terminei Falsa Posição")
+    # Ponto Fixo
+    [raizPF, imagem_raizPF, n_iteracoesPF] = metodos.FixedPoint(funcao, funcao/derivada,lb, ub, tolerancia, max_iter)
+    print("Terminei Ponto Fixo")
+    # Newton
+    [raizNew, imagem_raizNew, n_iteracoesNew] = metodos.Newton(funcao,derivada,x0, tolerancia, max_iter)
+    print("Terminei Newton")
+    # Secante
+    [raizSec, imagem_raizSec, n_iteracoesSec] = metodos.Secant(funcao, x0, x1, tolerancia, max_iter)
+    print("Terminei Secante")
     
-    c = b
-    while abs(f(c)) > tolerance and n_max > 0:
-        n_max -= 1
-        c = (a * f(b) - b * f(a)) / (f(b) - f(a))
-        if f(a) * f(c) < 0:
-            b = c
-        else:
-            a = c
-    return c, abs(f(c)), n_max
+    
+    # Plots
+    plt.title(titulos[contador], fontdict=fonte_titulo)
+    plt.xlabel("Iterções", fontdict=fonte_labels)
+    plt.ylabel("Erro Absoluto", fontdict=fonte_labels)
+    plt.ylim(0,1)
+    plt.grid(zorder = 1)
+    plt.scatter(imagem_raizBi, errosBissecao, marker='o', zorder = 2, label="Bisseção", s=100)
+    plt.scatter(imagem_raizFP, errosFalsaPosicao, marker='o', zorder = 2, label="Falsa Posição", s=100)
+    plt.scatter(imagem_raizPF, errosPontoFixo, marker='o', zorder = 2, label="Ponto Fixo", s=100)
+    plt.scatter(imagem_raizNew, errosNewton, marker='o', zorder = 2, label="Newton", s=100)
+    plt.scatter(imagem_raizSec, errosSecante, marker='o', zorder = 2, label="Secante", s=100)
+    plt.legend(loc = "upper left", fancybox = False, prop = fonte_legenda)
+    plt.savefig("./Graficos/Grafico"+titulos[contador]+".png")
+    
+    contador+=1
+    
 
-
-def FixedPoint(f, phi, a, b, tolerance, n_max):
-    if f(a) * f(b) >= 0:
-        print("As funções f(a) e f(b) deve ter sinais diferentes.")
-        return
-
-    # function to find fixed point
-    def g(x):
-        return phi(x) - x
-
-    # iterate until convergence
-    n = 0
-    c = b
-    while abs(g(c)) > tolerance and n_max > 0:
-        n_max -= 1
-        c = phi(c)
-        n += 1
-
-    return c, abs(g(c)), n_max
-
-
-def Newton(f, df, x0, tolerance, n_max):
-    # initialize iteration variables
-    n = 0
-    c = x0
-
-    # iterate until convergence
-    while abs(f(c)) > tolerance and n_max > 0:
-        n_max -= 1
-        c = c - f(c) / df(c)
-        n += 1
-
-    return c, abs(f(c)), n_max
-
-
-def Secant(f, x0, x1, tolerance, n_max):
-    # Check if the initial guesses bracket a root
-    if f(x0) * f(x1) >= 0:
-        print("As funções f(a) e f(b) deve ter sinais diferentes.")
-        return
-
-    # Iterate using the Secant method
-    for n in range(n_max):
-        x = x1 - f(x1) * (x1 - x0) / (f(x1) - f(x0))
-
-        # If the root has been found, return the result
-        if abs(f(x)) < tolerance:
-            return x, abs(f(x)), n
-
-        # If not, prepare for the next iteration
-        x0, x1 = x1, x
-
-    # If the maximum number of iterations has been reached, raise an error
-    print("O maximo de iterações foi alcançado.")
-
-
-phi = lambda x: function(x) / derivatefunction(x)
-listas_funcoes = ['bisection','regulaFalsi']
-
-#x = Symbol('x')
-#print("valor do diff",diff(function,x))
-
-
-for nome_funcao in listas_funcoes:
-    x, error, n = globals()[nome_funcao](function1, 1, 2, 1e-6, 100)
-    print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
-
-#x, error, n = FixedPoint(function, phi,0, 6, 1e-6, 100)
-#print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
-
-#x,error,n = Newton(function, derivatefunction, 1,1e-6,100)
-#print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
-
-#x,error,n = Secant(function, 0, 6,1e-6,100)
-#print(f"O valor estimado da raiz da função é {x} com um erro de {error} em {n} iterações.")
-
+# Print das derivadas
+"""
+for [funcao, derivada] in zip(funcoes, derivadas):
+    print("Funcao: ")
+    print(funcao)
+    print("Derivada: ")
+    print(derivada)
+"""
