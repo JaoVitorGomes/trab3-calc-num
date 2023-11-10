@@ -7,17 +7,17 @@ import matplotlib.pyplot as plt
 fonte_titulo={  
               "fontsize":14,
               "fontweight": 'bold',
-              "fontname":'Times New Roman',
+              #"fontname":'Times New Roman',
               }
 fonte_labels={
             "fontsize":12,
             "fontweight":'bold',
-            'fontname':'Times New Roman',
+            #'fontname':'Times New Roman',
             }
 fonte_legenda={
             "size":9,
             "weight":'normal',
-            'family':'Times New Roman',
+            #'family':'Times New Roman',
             }
 
 # ---------------Funções---------------------------
@@ -123,11 +123,11 @@ for [funcao, derivada] in zip(funcoes, derivadas):
     plt.ylim(0,1)
     plt.grid(zorder = 1)
     print(imagem_raizBi,raizBi)
-    plt.scatter(imagem_raizBi, errosBissecao, marker='o', zorder = 2, label="Bisseção", s=100)
-    plt.scatter(imagem_raizFP, errosFalsaPosicao, marker='o', zorder = 2, label="Falsa Posição", s=100)
-    plt.scatter(imagem_raizPF, errosPontoFixo, marker='o', zorder = 2, label="Ponto Fixo", s=100)
-    plt.scatter(imagem_raizNew, errosNewton, marker='o', zorder = 2, label="Newton", s=100)
-    plt.scatter(imagem_raizSec, errosSecante, marker='o', zorder = 2, label="Secante", s=100)
+    plt.scatter(imagem_raizBi, raizBi, marker='o', zorder = 2, label="Bisseção", s=100)
+    plt.scatter(imagem_raizFP, raizFP, marker='o', zorder = 2, label="Falsa Posição", s=100)
+    plt.scatter(imagem_raizPF, raizPF, marker='o', zorder = 2, label="Ponto Fixo", s=100)
+    plt.scatter(imagem_raizNew, raizNew, marker='o', zorder = 2, label="Newton", s=100)
+    plt.scatter(imagem_raizSec, raizSec, marker='o', zorder = 2, label="Secante", s=100)
     plt.legend(loc = "upper left", fancybox = False, prop = fonte_legenda)
     plt.savefig("./Graficos/Grafico"+titulos[contador]+".png")
     

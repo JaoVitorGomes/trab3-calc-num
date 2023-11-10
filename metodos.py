@@ -5,6 +5,9 @@ def bisection(f, a, b, tolerance, n_max):
     a = float(a)
     b = float(b)
     x = sp.Symbol('x')
+
+    errosBissecao = []
+
     
     if f.subs(x, float(a)) * f.subs(x, float(b)) >= 0:
         print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
@@ -38,22 +41,22 @@ def regulaFalsi(f, a, b, tolerance, n_max):
     a = float(a)
     b = float(b)
     x = sp.Symbol('x')
-
-
-    if f.subs(x, a) * f.subs(x, b) >= 0:
-        print("As funções f(a) e f(b) devem ter sinais diferentes.")
-        return
+    xold = b
 
     iteracoes = 1
     while iteracoes <= n_max:
-        c = (a * f.subs(x, b) - b * f.subs(x, a)) / (f.subs(x, b) - f.subs(x, a))
-        if abs(f.subs(x, c)) < tolerance:
+        c = (a * f.subs(x, float(b)) - b * f.subs(x, float(a))) / (f.subs(x, float(b)) - f.subs(x, float(a)))
+        print(iteracoes)
+        if abs(c - xold) < tolerance:
+            print('entrou')
             break
-        elif f.subs(x, a) * f.subs(x,c) < 0:
+        xold = c
+        if f.subs(x, float(a)) * f.subs(x,float(c)) < 0:
             b = float(c)
         else:
             a = float(c)
         iteracoes += 1
+        
 
     return c, abs(f.subs(x, float(c))), iteracoes
 
@@ -88,16 +91,17 @@ def Newton(f, df, x0, tolerance, n_max):
     x=sp.Symbol('x')
     
     # inicializa as variaveis de iteração
-    n = 0
-    c = float(x0)
+    c0 = float(x0)
+    c1 = c0
     iteracoes = 1
     # itera até convergir
-    while abs(f.subs(x,float(c))) > tolerance and iteracoes <= n_max:
-        c = c - f.subs(x,float(c)) / df.subs(x,float(c))
-        n += 1
+    while iteracoes <= n_max:
+        c1 = c0 - f.subs(x,float(c0)) / df.subs(x,float(c0))
+        if abs(c1 - c0) < tolerance:
+            break
         iteracoes+=1
 
-    return c, abs(f.subs(x,float(c))), iteracoes
+    return c1, abs(f.subs(x,float(c1))), iteracoes
 
 
 def Secant(f, x0, x1, tolerance, n_max):
