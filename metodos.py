@@ -93,7 +93,6 @@ def Newton(f, df, x0, tolerance, n_max):
     iteracoes = 1
     # itera até convergir
     while abs(f.subs(x,float(c))) > tolerance and iteracoes <= n_max:
-        n_max -= 1
         c = c - f.subs(x,float(c)) / df.subs(x,float(c))
         n += 1
         iteracoes+=1
