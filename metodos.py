@@ -2,28 +2,29 @@ import numpy as np
 import sympy as sp
 
 def bisection(f, a, b, tolerance, n_max):
-    
+    a = float(a)
+    b = float(b)
     x = sp.Symbol('x')
     
-    if f.subs(x, a) * f.subs(x, b) >= 0:
+    if f.subs(x, float(a)) * f.subs(x, float(b)) >= 0:
         print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
         return
 
     c = a
     cont = 1
     
-    while abs(f.subs(x,c)) > tolerance and cont <= n_max:
+    while abs(f.subs(x,float(c))) > tolerance and cont <= n_max:
         c = (a + b) / 2
-        if abs(f.subs(x,c)) < tolerance:
+        if abs(f.subs(x,float(c))) < tolerance:
             break
-        if f.subs(x,c) * f.subs(x,a) < 0:
-            b = c
+        if f.subs(x,float(c)) * f.subs(x,float(a)) < 0:
+            b = float(c)
         else:
-            a = c
+            a = float(c)
         if cont==1:
-            x0 = c
+            x0 = float(c)
         elif cont==2:
-            x1 = c
+            x1 = float(c)
             
         cont+=1
         
@@ -34,20 +35,21 @@ def bisection(f, a, b, tolerance, n_max):
 
 
 def regulaFalsi(f, a, b, tolerance, n_max):
+    a = float(a)
+    b = float(b)
     x = sp.Symbol('x')
 
-    print("valor 1:",f.subs(x, a) * f.subs(x, b))
-    print("valor 2:",f.subs(x, float(a)) * f.subs(x, float(b)))
-    if f.subs(x, float(a)) * f.subs(x, float(b)) >= 0:
+
+    if f.subs(x, a) * f.subs(x, b) >= 0:
         print("As funções f(a) e f(b) devem ter sinais diferentes.")
         return
 
     iteracoes = 1
     while iteracoes <= n_max:
-        c = (float(a) * f.subs(x, float(b)) - float(b) * f.subs(x, float(a))) / (f.subs(x, float(b)) - f.subs(x, float(a)))
-        if abs(f.subs(x, float(c))) < tolerance:
+        c = (a * f.subs(x, b) - b * f.subs(x, a)) / (f.subs(x, b) - f.subs(x, a))
+        if abs(f.subs(x, c)) < tolerance:
             break
-        elif f.subs(x, float(a)) * f.subs(x, float(c)) < 0:
+        elif f.subs(x, a) * f.subs(x,c) < 0:
             b = float(c)
         else:
             a = float(c)
@@ -56,67 +58,71 @@ def regulaFalsi(f, a, b, tolerance, n_max):
     return c, abs(f.subs(x, float(c))), iteracoes
 
 def FixedPoint(f, phi, a, b, tolerance, n_max):
-    
+    a = float(a)
+    b = float(b)
+
     x=sp.Symbol('x')
-    
-    if f.subs(x,a) * f.subs(x,b) >= 0:
+    print("phi  ",phi(x))
+    if f.subs(x,float(a)) * f.subs(x,float(b)) >= 0:
         print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
         return
 
-    # function to find fixed point
+    # função para encontrar o ponto fixo
     def g(x):
         return phi(x) - x
 
-    # iterate until convergence
+    # itera até convergir
     n = 0
-    c = b
+    c = float(b)
     iteracoes = 1
-    while abs(g(c)) > tolerance and iteracoes <= n_max:
+    while abs(g(float(c))) > tolerance and iteracoes <= n_max:
         n_max -= 1
         c = phi(c)
         n += 1
         iteracoes+=1
 
-    return c, abs(g(c)), iteracoes
+    return c, abs(g(float(c))), iteracoes
 
 
 def Newton(f, df, x0, tolerance, n_max):
-    
+    x0 = float(x0)
     x=sp.Symbol('x')
     
-    # initialize iteration variables
+    # inicializa as variaveis de iteração
     n = 0
-    c = x0
+    c = float(x0)
     iteracoes = 1
-    # iterate until convergence
-    while abs(f.subs(x,c)) > tolerance and iteracoes <= n_max:
+    # itera até convergir
+    while abs(f.subs(x,float(c))) > tolerance and iteracoes <= n_max:
         n_max -= 1
-        c = c - f.subs(x,c) / df.subs(x,c)
+        c = c - f.subs(x,float(c)) / df.subs(x,float(c))
         n += 1
         iteracoes+=1
 
-    return c, abs(f.subs(x,c)), iteracoes
+    return c, abs(f.subs(x,float(c))), iteracoes
 
 
 def Secant(f, x0, x1, tolerance, n_max):
-    
+    x0 = float(x0)
+    x1 = float(x1)
+
     xSimbolico=sp.Symbol('x')
-    
+    print(f.subs(xSimbolico,float(x0)) , f.subs(xSimbolico,float(x1)))
     # Check if the initial guesses bracket a root
-    if f.subs(x,x0) * f.subs(x,x1) >= 0:
+    if f.subs(xSimbolico,float(x0)) * f.subs(xSimbolico,float(x1)) >= 0:
         print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
         return
 
-    # Iterate using the Secant method
+    # Itera usando metodo da secante
     for n in range(n_max):
-        x = x1 - f.subs(xSimbolico,x1) * (x1 - x0) / (f.subs(xSimbolico,x1) - f.subs(xSimbolico,x0))
+        x = x1 - f.subs(xSimbolico,float(x1)) * (float(x1) - float(x0)) / (f.subs(xSimbolico,float(x1)) - f.subs(xSimbolico,float(x0)))
+        print(x)
+        # se a raiz foi encontrada, returna o resultado
+        if abs(f.subs(xSimbolico,float(x))) <= tolerance:
+            return x, abs(f.subs(xSimbolico,float(x))), n
 
-        # If the root has been found, return the result
-        if abs(f.subs(xSimbolico,x)) <= tolerance:
-            return x, abs(f.subs(xSimbolico,x)), n
-
-        # If not, prepare for the next iteration
+        # se não, prepara para a proxima iteração
         x0, x1 = x1, x
         
-    # If the maximum number of iterations has been reached, raise an error
+    # Se o numero maximo de iterações foi alcançado, mostra o erro
     print("O maximo de iterações foi alcançado.")
