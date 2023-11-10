@@ -62,14 +62,13 @@ def FixedPoint(f, phi, a, b, tolerance, n_max):
     b = float(b)
 
     x=sp.Symbol('x')
-    print("phi  ",phi(x))
     if f.subs(x,float(a)) * f.subs(x,float(b)) >= 0:
         print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
         return
 
     # função para encontrar o ponto fixo
-    def g(x):
-        return phi(x) - x
+    def g(xi):
+        return phi.subs(x,xi) - xi
 
     # itera até convergir
     n = 0
@@ -77,7 +76,7 @@ def FixedPoint(f, phi, a, b, tolerance, n_max):
     iteracoes = 1
     while abs(g(float(c))) > tolerance and iteracoes <= n_max:
         n_max -= 1
-        c = phi(c)
+        c = phi.subs(x,c)
         n += 1
         iteracoes+=1
 
@@ -107,7 +106,7 @@ def Secant(f, x0, x1, tolerance, n_max):
     x1 = float(x1)
 
     xSimbolico=sp.Symbol('x')
-    print(f.subs(xSimbolico,float(x0)) , f.subs(xSimbolico,float(x1)))
+    print(x0,x1,f.subs(xSimbolico,float(x0)) , f.subs(xSimbolico,float(x1)))
     # Check if the initial guesses bracket a root
     if f.subs(xSimbolico,float(x0)) * f.subs(xSimbolico,float(x1)) >= 0:
         print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
