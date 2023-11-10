@@ -118,7 +118,7 @@ for [funcao, derivada] in zip(funcoes, derivadas):
     
     # Plots
     plt.title(titulos[contador], fontdict=fonte_titulo)
-    plt.xlabel("Iterções", fontdict=fonte_labels)
+    plt.xlabel("Iterações", fontdict=fonte_labels)
     plt.ylabel("Erro Absoluto", fontdict=fonte_labels)
     plt.ylim(0,1)
     plt.grid(zorder = 1)
