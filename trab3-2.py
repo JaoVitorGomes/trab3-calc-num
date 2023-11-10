@@ -22,22 +22,22 @@ funcao = ((1500 * (1 + ((sp.sin(x/2) + 1)**(10 * 10**(-4))))**240) - 1500) / 750
 derivada = sp.diff(funcao, x)
 
 [meses_necessarios, erro, n_iteracoes] = metodos.Newton(funcao, derivada, 10, 1e-6, 1000)
-print("Meses necessarios para ganhar o dinheiro necessario = "+str(meses_necessarios/12))
+print("Anos necessarios para ganhar o dinheiro necessario = "+str(meses_necessarios/12))
 print()
 
 
 #--------------Problema 2 letra A--------------------
-funcao = (0.9*x*sp.exp(-x/3) - 1)
+funcao = (0.90609*x*sp.exp(-x/3) - 1)
 derivada = sp.diff(funcao,x)
 
-[tempo, erro, n_iteracoes] = metodos.Newton(funcao, derivada, 0.75, 1e-2, 1000)
+[tempo, erro, n_iteracoes] = metodos.Newton(funcao, derivada, 0.75, 1e-5, 1000)
 print(f"O Tempo estimado para atingir a concentração desejada {tempo} com um erro de {erro} em {n_iteracoes} iterações.")
 print()
 
 #--------------Problema 2 letra B--------------------
-funcao = (0.9*x*sp.exp(-x/3) - 1)
+funcao = (0.90609*x*sp.exp(-x/3) - 1)
 derivada = sp.diff(funcao,x)
 
-[tempo, erro, n_iteracoes] = metodos.Newton(funcao, derivada, 0.75, 1e-2, 1000)
+[tempo, erro, n_iteracoes] = metodos.Newton(funcao, derivada, 0.75, 1e-5, 1000)
 print(f"O Tempo estimado para atingir a concentração desejada {tempo} com um erro de {erro} em {n_iteracoes} iterações.")
 print()

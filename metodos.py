@@ -11,7 +11,7 @@ def bisection(f, a, b, tolerance, n_max):
 
     
     if f.subs(x, float(a)) * f.subs(x, float(b)) >= 0:
-        print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
+        #print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
         return
 
     c = a
@@ -33,11 +33,8 @@ def bisection(f, a, b, tolerance, n_max):
             x1 = float(c)
             
         cont+=1
-        
-    else:
-        print("O maximo de iterações foi alcançado.")
 
-    return c, abs(f.subs(x,float(c))), cont, x0, x1, errosBissecao,iteracoesBissecao
+    return c, abs(f.subs(x,float(c))), cont, x0, x1, errosBissecao, cont
 
 
 def regulaFalsi(f, a, b, tolerance, n_max):
@@ -55,7 +52,7 @@ def regulaFalsi(f, a, b, tolerance, n_max):
         iteracoesFalsaPosicao.append(iteracoes)
 
         if abs(c - xold) < tolerance:
-            print('entrou',(c - xold))
+            #print('entrou',(c - xold))
             break
         xold = c
         if f.subs(x, float(a)) * f.subs(x,float(c)) < 0:
@@ -65,7 +62,7 @@ def regulaFalsi(f, a, b, tolerance, n_max):
         iteracoes += 1
         
 
-    return c, abs(f.subs(x, float(c))), iteracoes,errosFalsaPosicao,iteracoesFalsaPosicao
+    return c, abs(f.subs(x, float(c))), iteracoes,errosFalsaPosicao,iteracoes
 
 def FixedPoint(f, phi, a, b, tolerance, n_max):
     a = float(a)
@@ -73,7 +70,7 @@ def FixedPoint(f, phi, a, b, tolerance, n_max):
 
     x=sp.Symbol('x')
     if f.subs(x,float(a)) * f.subs(x,float(b)) >= 0:
-        print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
+        #print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
         return
 
     # função para encontrar o ponto fixo
@@ -84,13 +81,12 @@ def FixedPoint(f, phi, a, b, tolerance, n_max):
     n = 0
     c = float(b)
     iteracoes = 1
-    while abs(g(float(c))) > tolerance and iteracoes <= n_max:
-        n_max -= 1
+    while abs(g(c)) > tolerance and iteracoes <= n_max:
         c = phi.subs(x,c)
         n += 1
         iteracoes+=1
 
-    return c, abs(g(float(c))), iteracoes
+    return c, abs(g(c)), iteracoes
 
 
 def Newton(f, df, x0, tolerance, n_max):
@@ -98,18 +94,16 @@ def Newton(f, df, x0, tolerance, n_max):
     x=sp.Symbol('x')
     
     # inicializa as variaveis de iteração
-    c0 = float(x0)
-    c1 = c0
+    n = 0
+    c = float(x0)
     iteracoes = 1
     # itera até convergir
-    while iteracoes <= n_max:
-        c1 = c0 - f.subs(x,float(c0)) / df.subs(x,float(c0))
-        if abs(c1 - c0) < tolerance:
-            break
+    while abs(f.subs(x,float(c))) > tolerance and iteracoes <= n_max:
+        c = c - f.subs(x,float(c)) / df.subs(x,float(c))
+        n += 1
         iteracoes+=1
 
-    return c1, abs(f.subs(x,float(c1))), iteracoes
-
+    return c, abs(f.subs(x,float(c))), iteracoes
 
 def Secant(f, x0, x1, tolerance, n_max):
     x0 = float(x0)
@@ -120,7 +114,7 @@ def Secant(f, x0, x1, tolerance, n_max):
     # Itera usando metodo da secante
     for n in range(n_max):
         x = x1 - f.subs(xSimbolico,float(x1)) * (float(x1) - float(x0)) / (f.subs(xSimbolico,float(x1)) - f.subs(xSimbolico,float(x0)))
-        print(x)
+        #print(x)
         
         # se a raiz foi encontrada, returna o resultado
         if abs(x - x1) < tolerance:
@@ -130,4 +124,4 @@ def Secant(f, x0, x1, tolerance, n_max):
         x0, x1 = x1, x
         
     # Se o numero maximo de iterações foi alcançado, mostra o erro
-    print("O maximo de iterações foi alcançado.")
+    #print("O maximo de iterações foi alcançado.")
