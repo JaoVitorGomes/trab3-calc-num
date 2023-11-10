@@ -101,10 +101,10 @@ for [funcao, derivada] in zip(funcoes, derivadas):
             phi = phis[3] 
     
     # Bisseção
-    [raizBi, imagem_raizBi, n_iteracoesBi, x0, x1] = metodos.bisection(funcao, lb, ub, tolerancia, max_iter)
+    [raizBi, imagem_raizBi, n_iteracoesBi, x0, x1, errosBissecao,iteracoesBissecao] = metodos.bisection(funcao, lb, ub, tolerancia, max_iter)
     print("Terminei Bisseção")
     # Falsa Posição
-    [raizFP, imagem_raizFP, n_iteracoesFP] = metodos.regulaFalsi(funcao, lb, ub, tolerancia, max_iter)
+    [raizFP, imagem_raizFP, n_iteracoesFP,errosFalsaPosicao,iteracoesFalsaPosicao] = metodos.regulaFalsi(funcao, lb, ub, tolerancia, max_iter)
     print("Terminei Falsa Posição")
     # Ponto Fixo
     [raizPF, imagem_raizPF, n_iteracoesPF] = metodos.FixedPoint(funcao, phi, lb, ub, tolerancia, max_iter)
@@ -120,11 +120,11 @@ for [funcao, derivada] in zip(funcoes, derivadas):
     plt.title(titulos[contador], fontdict=fonte_titulo)
     plt.xlabel("Iterações", fontdict=fonte_labels)
     plt.ylabel("Erro Absoluto", fontdict=fonte_labels)
-    plt.ylim(0,1)
+    plt.ylim(0,0.07)
     plt.grid(zorder = 1)
-    print(imagem_raizBi,raizBi)
-    plt.scatter(imagem_raizBi, raizBi, marker='o', zorder = 2, label="Bisseção", s=100)
-    plt.scatter(imagem_raizFP, raizFP, marker='o', zorder = 2, label="Falsa Posição", s=100)
+    print(imagem_raizBi,iteracoesFalsaPosicao)
+    plt.scatter(iteracoesBissecao, errosBissecao, marker='o', zorder = 2, label="Bisseção", s=100)
+    plt.scatter(iteracoesFalsaPosicao, errosFalsaPosicao, marker='o', zorder = 2, label="Falsa Posição", s=100)
     plt.scatter(imagem_raizPF, raizPF, marker='o', zorder = 2, label="Ponto Fixo", s=100)
     plt.scatter(imagem_raizNew, raizNew, marker='o', zorder = 2, label="Newton", s=100)
     plt.scatter(imagem_raizSec, raizSec, marker='o', zorder = 2, label="Secante", s=100)
