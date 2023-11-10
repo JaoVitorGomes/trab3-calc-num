@@ -31,7 +31,7 @@ def bisection(f, a, b, tolerance, n_max):
     else:
         print("O maximo de iterações foi alcançado.")
 
-    return c, abs(f.subs(x,c)), cont, x0, x1
+    return c, abs(f.subs(x,float(c))), cont, x0, x1
 
 
 def regulaFalsi(f, a, b, tolerance, n_max):
@@ -108,9 +108,9 @@ def Secant(f, x0, x1, tolerance, n_max):
     xSimbolico=sp.Symbol('x')
     print(x0,x1,f.subs(xSimbolico,float(x0)) , f.subs(xSimbolico,float(x1)))
     # Check if the initial guesses bracket a root
-    if f.subs(xSimbolico,float(x0)) * f.subs(xSimbolico,float(x1)) >= 0:
-        print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
-        return
+    # if f.subs(xSimbolico,float(x0)) * f.subs(xSimbolico,float(x1)) >= 0:
+    #     print("As funções f.subs(x,a) e f.subs(x,b) deve ter sinais diferentes.")
+    #     return
 
     # Itera usando metodo da secante
     for n in range(n_max):

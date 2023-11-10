@@ -122,6 +122,7 @@ for [funcao, derivada] in zip(funcoes, derivadas):
     plt.ylabel("Erro Absoluto", fontdict=fonte_labels)
     plt.ylim(0,1)
     plt.grid(zorder = 1)
+    print(imagem_raizBi,raizBi)
     plt.scatter(imagem_raizBi, errosBissecao, marker='o', zorder = 2, label="Bisseção", s=100)
     plt.scatter(imagem_raizFP, errosFalsaPosicao, marker='o', zorder = 2, label="Falsa Posição", s=100)
     plt.scatter(imagem_raizPF, errosPontoFixo, marker='o', zorder = 2, label="Ponto Fixo", s=100)
