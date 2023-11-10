@@ -36,22 +36,24 @@ def bisection(f, a, b, tolerance, n_max):
 def regulaFalsi(f, a, b, tolerance, n_max):
     x = sp.Symbol('x')
 
-    if f.subs(x, a) * f.subs(x, b) >= 0:
+    print("valor 1:",f.subs(x, a) * f.subs(x, b))
+    print("valor 2:",f.subs(x, float(a)) * f.subs(x, float(b)))
+    if f.subs(x, float(a)) * f.subs(x, float(b)) >= 0:
         print("As funções f(a) e f(b) devem ter sinais diferentes.")
         return
 
     iteracoes = 1
     while iteracoes <= n_max:
-        c = (a * f.subs(x, b) - b * f.subs(x, a)) / (f.subs(x, b) - f.subs(x, a))
-        if abs(f.subs(x, c)) < tolerance:
+        c = (float(a) * f.subs(x, float(b)) - float(b) * f.subs(x, float(a))) / (f.subs(x, float(b)) - f.subs(x, float(a)))
+        if abs(f.subs(x, float(c))) < tolerance:
             break
-        elif f.subs(x, a) * f.subs(x, c) < 0:
-            b = c
+        elif f.subs(x, float(a)) * f.subs(x, float(c)) < 0:
+            b = float(c)
         else:
-            a = c
+            a = float(c)
         iteracoes += 1
 
-    return c, abs(f.subs(x, c)), iteracoes
+    return c, abs(f.subs(x, float(c))), iteracoes
 
 def FixedPoint(f, phi, a, b, tolerance, n_max):
     
